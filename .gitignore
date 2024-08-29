@@ -1,3 +1,4 @@
 .vscode
 .idea
 .mypy_cache
+__about__.py
