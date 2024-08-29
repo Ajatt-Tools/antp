@@ -4,7 +4,10 @@
 import dataclasses
 import re
 from dataclasses import dataclass
-from .consts import FONTS_DIR, NOTE_TYPES_DIR
+from .consts import REPO_MEDIA_DIR, NOTE_TYPES_DIR
+
+
+RE_MEDIA_IMPORT = re.compile(r"url\([\"']([\w_.]+\.(?:[ot]tf|woff\d?|css))[\"']\)", flags=re.IGNORECASE)
 
 
 class ANTPError(Exception):
@@ -52,10 +55,10 @@ def select(items: list[str], msg: str = "Select item number: ") -> str | None:
     return items[idx]
 
 
-def get_used_fonts(template_css: str):
-    return re.findall(r"url\([\"'](\w+\.(?:[ot]tf|woff\d?))[\"']\)", template_css, re.IGNORECASE)
+def find_referenced_media_files(template_css: str) -> frozenset[str]:
+    return frozenset(re.findall(RE_MEDIA_IMPORT, template_css))
 
 
 def init():
-    for path in (NOTE_TYPES_DIR, FONTS_DIR):
+    for path in (NOTE_TYPES_DIR, REPO_MEDIA_DIR):
         path.mkdir(exist_ok=True)

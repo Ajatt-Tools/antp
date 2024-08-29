@@ -4,11 +4,11 @@
 
 import json
 import os
-from typing import Any, Collection, Iterable
+from typing import Any, Collection, Iterable, Sequence
 
 from .ankiconnect import invoke, request_model_names
-from .common import CardTemplate, NoteType, get_used_fonts, select
-from .consts import NOTE_TYPES_DIR, CSS_FILENAME, FRONT_FILENAME, BACK_FILENAME, JSON_FILENAME, FONTS_DIR
+from .common import CardTemplate, NoteType, find_referenced_media_files, select
+from .consts import NOTE_TYPES_DIR, CSS_FILENAME, FRONT_FILENAME, BACK_FILENAME, JSON_FILENAME, REPO_MEDIA_DIR
 
 
 def read_css(model_dir_name: str) -> str:
@@ -66,22 +66,27 @@ def send_note_type(model: NoteType):
     invoke("createModel", **template_json)
 
 
-def available_fonts(required_fonts: Collection[str]) -> Iterable[str]:
-    """Filter required fonts and leave only those available on disk."""
-    for file in os.listdir(FONTS_DIR):
-        if file in required_fonts:
-            yield file
+def save_files_to_anki_col(file_names: frozenset[str]) -> None:
+    """
+    Take a list of files and save them to Anki's 'collection.media' folder.
+    The files should exist in the "media" folder on disk.
+    """
+    for file_name in file_names:
+        full_path = os.path.join(REPO_MEDIA_DIR, file_name)
+        if not os.path.isfile(full_path):
+            print(f"not found on disk: '{full_path}'")
+            continue
+        invoke("storeMediaFile", filename=file_name, path=full_path)
+        print(f"saved file in Anki collection: '{file_name}'")
 
 
-def store_fonts(fonts: list[str]):
-    for file in available_fonts(fonts):
-        invoke("storeMediaFile", filename=file, path=os.path.join(FONTS_DIR, file))
-
-
-def import_note_type():
+def import_note_type() -> None:
+    """
+    Select a note type and add it to the currently opened Anki profile using AnkiConnect.
+    """
     if model_dir_name := select(os.listdir(NOTE_TYPES_DIR)):
         print(f"Selected model: {model_dir_name}")
         model = read_model(model_dir_name)
-        store_fonts(get_used_fonts(model.css))
         send_note_type(model)
+        save_files_to_anki_col(find_referenced_media_files(model.css))
         print("Done.")

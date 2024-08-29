@@ -5,9 +5,9 @@ import os
 from typing import Any
 
 from .ankiconnect import invoke, request_model_names
-from .common import NoteType, get_used_fonts, select
+from .common import NoteType, find_referenced_media_files, select
 from .consts import NOTE_TYPES_DIR
-from .importer import read_model, store_fonts
+from .importer import read_model, save_files_to_anki_col
 
 
 def format_templates(model: NoteType) -> dict[str, Any]:
@@ -40,6 +40,6 @@ def update_note_type():
     if model_name := select(updatable_models):
         print(f"Selected note type: {model_name}")
         model = models_on_disk[model_name]
-        store_fonts(get_used_fonts(model.css))
+        save_files_to_anki_col(find_referenced_media_files(model.css))
         send_note_type(model)
         print("Done.")

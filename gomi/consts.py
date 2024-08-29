@@ -11,4 +11,4 @@ BACK_FILENAME = "back.html"
 README_FILENAME = "README.md"
 THIS_DIR = pathlib.Path.cwd()
 NOTE_TYPES_DIR = THIS_DIR / "templates"
-FONTS_DIR = THIS_DIR / "fonts"
+REPO_MEDIA_DIR = THIS_DIR / "media"

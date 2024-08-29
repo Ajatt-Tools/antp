@@ -4,9 +4,9 @@
 import os
 
 from .ankiconnect import request_model_names
-from .common import get_used_fonts, select
+from .common import find_referenced_media_files, select
 from .consts import NOTE_TYPES_DIR
-from .importer import read_model, store_fonts
+from .importer import read_model, save_files_to_anki_col
 from .updater import send_note_type
 
 
@@ -19,7 +19,7 @@ def overwrite_note_type():
     print(f"Writing templates from {model_name_on_disk} onto {model_name_in_anki}...")
 
     model = models_on_disk[model_name_on_disk]
-    store_fonts(get_used_fonts(model.css))
+    save_files_to_anki_col(find_referenced_media_files(model.css))
     send_note_type(model.rename(model_name_in_anki))
 
     print("Done.")

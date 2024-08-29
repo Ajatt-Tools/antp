@@ -12,7 +12,7 @@ from os import DirEntry
 from typing import Any
 
 from .ankiconnect import invoke, request_model_names
-from .common import CardTemplate, NoteType, get_used_fonts, select
+from .common import CardTemplate, NoteType, find_referenced_media_files, select
 from .consts import (
     NOTE_TYPES_DIR,
     FRONT_FILENAME,
@@ -21,7 +21,7 @@ from .consts import (
     CSS_FILENAME,
     README_FILENAME,
     JSON_INDENT,
-    FONTS_DIR,
+    REPO_MEDIA_DIR,
 )
 
 
@@ -102,18 +102,26 @@ def save_note_type(model: NoteType):
             f.write(f"# {model.name}\n\n*Description and screenshots here.*")
 
 
-def save_fonts(model: NoteType) -> None:
-    linked_fonts = get_used_fonts(model.css)
-    for font in linked_fonts:
-        if file_b64 := invoke("retrieveMediaFile", filename=font):
-            with open(os.path.join(FONTS_DIR, font), "bw") as f:
+def save_media_imports(model: NoteType) -> None:
+    """
+    Save fonts and CSS files referenced in the CSS template to the "media" folder.
+    """
+    linked_media_files = find_referenced_media_files(model.css)
+    for file_name in linked_media_files:
+        if file_b64 := invoke("retrieveMediaFile", filename=file_name):
+            full_path = os.path.join(REPO_MEDIA_DIR, file_name)
+            with open(full_path, "bw") as f:
                 f.write(base64.b64decode(file_b64))
+            print(f"saved file: '{full_path}'")
 
 
-def export_note_type():
+def export_note_type() -> None:
+    """
+    Select a note type in Anki and add save it to the hard drive.
+    """
     if model := select(request_model_names()):
         print(f"Selected model: {model}")
         template = fetch_template(model)
-        save_fonts(template)
         save_note_type(template)
+        save_media_imports(template)
         print("Done.")
