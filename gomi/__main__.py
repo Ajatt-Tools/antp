@@ -26,6 +26,10 @@ def wrap_errors(fn: Callable):
         print("\nAborted.")
 
 
+def program_name() -> str:
+    return os.path.basename(sys.argv[0])
+
+
 def print_help():
     options = (
         ("import", "Add one of the stored note types to Anki."),
@@ -38,7 +42,7 @@ def print_help():
         ("-v, --verbose", "Show detailed info when errors occur."),
     )
     print(
-        "Usage: gomi.sh [OPTIONS]\n\n"
+        f"Usage: {program_name()} [OPTIONS]\n\n"
         "Options:"
     )
     col_width = [max(len(word) for word in col) + 2 for col in zip(*options)]
