@@ -4,6 +4,8 @@
 
 import base64
 import json
+import os
+import pathlib
 import random
 import shutil
 from os import DirEntry
@@ -11,7 +13,8 @@ from typing import Any
 
 from .ankiconnect import invoke, request_model_names
 from .common import CardTemplate, NoteType, get_used_fonts, select
-from .consts import *
+from .consts import NOTE_TYPES_DIR, FRONT_FILENAME, BACK_FILENAME, JSON_FILENAME, CSS_FILENAME, README_FILENAME, \
+    JSON_INDENT, FONTS_DIR
 
 
 def fetch_card_templates(model_name: str) -> list[CardTemplate]:
@@ -30,20 +33,20 @@ def fetch_template(model_name: str) -> NoteType:
     )
 
 
-def select_model_dir_path(model_name: str) -> str:
-    dir_path = os.path.join(NOTE_TYPES_DIR, model_name)
-    dir_content = os.listdir(NOTE_TYPES_DIR)
+def select_model_dir_path(model_name: str) -> pathlib.Path:
+    dir_path = NOTE_TYPES_DIR / model_name
+    dir_content = frozenset(os.listdir(NOTE_TYPES_DIR))
 
     if model_name in dir_content:
         ans = input("Template with this name already exists. Overwrite [y/N]? ")
         if ans.lower() != 'y':
-            while os.path.basename(dir_path) in dir_content:
-                dir_path = os.path.join(NOTE_TYPES_DIR, f"{model_name}_{random.randint(0, 9999)}")
+            while dir_path.name in dir_content:
+                dir_path = NOTE_TYPES_DIR / f"{model_name}_{random.randint(0, 9999)}"
 
     return dir_path
 
 
-def write_card_templates(model_dir_path: str, templates: list[CardTemplate]) -> None:
+def write_card_templates(model_dir_path: pathlib.Path, templates: list[CardTemplate]) -> None:
     for template in templates:
         dir_path = os.path.join(model_dir_path, template.name)
         if not os.path.isdir(dir_path):
@@ -61,18 +64,18 @@ def format_export(model: NoteType) -> dict[str, Any]:
     }
 
 
-def remove_deleted_templates(model_dir_path: str, templates: list[str]) -> None:
+def remove_deleted_templates(model_dir_path: pathlib.Path, templates: list[str]) -> None:
+    entry: DirEntry
     for entry in os.scandir(model_dir_path):
-        entry: DirEntry
         if entry.is_dir() and entry.name not in templates:
             shutil.rmtree(entry.path)
 
 
 def save_note_type(model: NoteType):
     dir_path = select_model_dir_path(model.name)
-    json_path = os.path.join(dir_path, JSON_FILENAME)
-    css_path = os.path.join(dir_path, CSS_FILENAME)
-    readme_path = os.path.join(dir_path, README_FILENAME)
+    json_path = dir_path / JSON_FILENAME
+    css_path = dir_path / CSS_FILENAME
+    readme_path = dir_path / README_FILENAME
 
     if not os.path.isdir(dir_path):
         os.mkdir(dir_path)
@@ -86,7 +89,7 @@ def save_note_type(model: NoteType):
     write_card_templates(dir_path, model.templates)
     remove_deleted_templates(dir_path, [template.name for template in model.templates])
 
-    if not os.path.isfile(readme_path):
+    if not readme_path.is_file():
         with open(readme_path, 'w', encoding='utf8') as f:
             f.write(f"# {model.name}\n\n*Description and screenshots here.*")
 

@@ -1,10 +1,11 @@
 # Overwriter acts like Updater but allows mapping models with different names.
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
+import os
 
 from .ankiconnect import request_model_names
 from .common import get_used_fonts, select
-from .consts import *
+from .consts import NOTE_TYPES_DIR
 from .importer import read_model, store_fonts
 from .updater import send_note_type
 

@@ -2,6 +2,7 @@
 # License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 import os
+import pathlib
 import sys
 from typing import Callable
 from urllib.error import URLError
@@ -49,7 +50,15 @@ def list_stored_note_types():
     print('\n'.join(os.listdir(NOTE_TYPES_DIR)))
 
 
+def not_correct_cwd():
+    return pathlib.Path.cwd().joinpath(".git").is_dir()
+
+
 def main():
+    if not_correct_cwd():
+        print("Current directory is not a git repository. Run `git init`.")
+        return
+
     if len(sys.argv) < 2:
         print("No action provided.")
         print_help()

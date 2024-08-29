@@ -3,25 +3,26 @@
 # License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 import json
+import os
 from typing import Any, Collection, Iterable
 
 from .ankiconnect import invoke, request_model_names
 from .common import CardTemplate, NoteType, get_used_fonts, select
-from .consts import *
+from .consts import NOTE_TYPES_DIR, CSS_FILENAME, FRONT_FILENAME, BACK_FILENAME, JSON_FILENAME, FONTS_DIR
 
 
 def read_css(model_dir_name: str) -> str:
-    with open(os.path.join(NOTE_TYPES_DIR, model_dir_name, CSS_FILENAME), encoding='utf8') as f:
+    with open(NOTE_TYPES_DIR / model_dir_name / CSS_FILENAME, encoding='utf8') as f:
         return f.read()
 
 
 def read_card_templates(model_dir_name: str, template_names: list[str]) -> list[CardTemplate]:
     templates = []
     for template_name in template_names:
-        dir_path = os.path.join(NOTE_TYPES_DIR, model_dir_name, template_name)
+        dir_path = NOTE_TYPES_DIR / model_dir_name / template_name
         with (
-            open(os.path.join(dir_path, FRONT_FILENAME), encoding='utf8') as front,
-            open(os.path.join(dir_path, BACK_FILENAME), encoding='utf8') as back
+            open(dir_path / FRONT_FILENAME, encoding='utf8') as front,
+            open(dir_path / BACK_FILENAME, encoding='utf8') as back
         ):
             templates.append(CardTemplate(template_name, front.read(), back.read()))
     return templates

@@ -2,10 +2,10 @@
 # License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 import dataclasses
+import os
 import re
 from dataclasses import dataclass
-
-from .consts import *
+from .consts import FONTS_DIR, NOTE_TYPES_DIR
 
 
 class ANTPError(Exception):
@@ -27,12 +27,10 @@ class NoteType:
     templates: list[CardTemplate]
 
     def rename(self, new_name: str):
-        _d = dataclasses.asdict(self)
-        del _d['name']
-        return type(self)(name=new_name, **_d)
+        return dataclasses.replace(self, name=new_name)
 
 
-def read_num(msg: str = "Input number: ", min_val: int = 0, max_val: int = None) -> int:
+def read_num(msg: str = "Input number: ", min_val: int = 0, max_val: int | None = None) -> int:
     try:
         resp = int(input(msg))
     except ValueError as ex:
@@ -45,7 +43,7 @@ def read_num(msg: str = "Input number: ", min_val: int = 0, max_val: int = None)
 def select(items: list[str], msg: str = "Select item number: ") -> str | None:
     if not items:
         print("Nothing to show.")
-        return
+        return None
 
     for idx, model in enumerate(items):
         print(f"{idx}: {model}")
@@ -60,8 +58,6 @@ def get_used_fonts(template_css: str):
 
 
 def init():
-    from .consts import FONTS_DIR, NOTE_TYPES_DIR
-
     for path in (NOTE_TYPES_DIR, FONTS_DIR):
         if not os.path.isdir(path):
             os.mkdir(path)
