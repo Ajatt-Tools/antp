@@ -1,21 +1,23 @@
 [build-system]
-requires = ["hatchling"]
 build-backend = "hatchling.build"
+requires = [
+  "hatchling",
+  "hatch-vcs",
+]
 
 [project]
 name = "antp"
 dynamic = ["version"]
 description = 'Package to store and manage Note Types for Anki in a git repository.'
 readme = "README.md"
-requires-python = ">=3.10"
-license = {text = "AGPL-3.0"}
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
 keywords = []
 authors = [
   {name = "Ajatt-Tools and contributors"},
 ]
 classifiers = [
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython",
@@ -32,7 +34,11 @@ Source = "https://github.com/Ajatt-Tools/antp"
 antp = "antp.__main__:main"
 
 [tool.hatch.version]
-path = "src/antp/__about__.py"
+source = "vcs"
+path = "antp/__about__.py"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "antp/__about__.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
@@ -59,3 +65,23 @@ exclude_lines = [
   "if __name__ == .__main__.:",
   "if TYPE_CHECKING:",
 ]
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+
+[tool.hatch.envs.dev]
+dependencies = [
+  "mypy>=1.0.0",
+  "isort",
+  "pytest",
+  "black",
+]
+
+[tool.hatch.envs.dev.scripts]
+# run as `hatch run dev:scriptname`
+format = "black ."
+test = "pytest"
