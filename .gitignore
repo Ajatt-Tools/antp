@@ -1,4 +1,5 @@
 .vscode
 .idea
 .mypy_cache
+.ruff_cache
 __about__.py

@@ -7,7 +7,7 @@ import sys
 from typing import Callable
 from urllib.error import URLError
 
-from .common import ANTPError
+from .common import ANTPError, init
 from .consts import NOTE_TYPES_DIR
 from .exporter import export_note_type
 from .importer import import_note_type
@@ -54,15 +54,17 @@ def is_correct_cwd():
     return pathlib.Path.cwd().joinpath(".git").is_dir()
 
 
-def main():
+def main() -> int:
     if not is_correct_cwd():
         print("Current directory is not a git repository. Run `git init`.")
-        return
+        return 1
 
     if len(sys.argv) < 2:
         print("No action provided.")
         print_help()
-        return
+        return 1
+
+    init()
 
     action = None
     wrap = True
@@ -89,7 +91,9 @@ def main():
     else:
         print("Unknown action.")
         print_help()
+        return 1
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

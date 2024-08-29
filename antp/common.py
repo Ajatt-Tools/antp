@@ -59,8 +59,4 @@ def get_used_fonts(template_css: str):
 
 def init():
     for path in (NOTE_TYPES_DIR, FONTS_DIR):
-        if not os.path.isdir(path):
-            os.mkdir(path)
-
-
-init()
+        path.mkdir(exist_ok=True)
