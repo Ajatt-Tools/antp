@@ -38,7 +38,7 @@ def print_help():
         ("-v, --verbose", "Show detailed info when errors occur."),
     )
     print(
-        "Usage: antp.sh [OPTIONS]\n\n"
+        "Usage: gomi.sh [OPTIONS]\n\n"
         "Options:"
     )
     col_width = [max(len(word) for word in col) + 2 for col in zip(*options)]

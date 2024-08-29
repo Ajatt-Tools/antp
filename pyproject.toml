@@ -6,7 +6,7 @@ requires = [
 ]
 
 [project]
-name = "antp"
+name = "gomi"
 dynamic = ["version"]
 description = 'Package to store and manage Note Types for Anki in a git repository.'
 readme = "README.md"
@@ -26,38 +26,38 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Documentation = "https://github.com/Ajatt-Tools/antp#readme"
-Issues = "https://github.com/Ajatt-Tools/antp/issues"
-Source = "https://github.com/Ajatt-Tools/antp"
+Documentation = "https://github.com/Ajatt-Tools/gomi#readme"
+Issues = "https://github.com/Ajatt-Tools/gomi/issues"
+Source = "https://github.com/Ajatt-Tools/gomi"
 
 [project.scripts]
-antp = "antp.__main__:main"
+gomi = "gomi.__main__:main"
 
 [tool.hatch.version]
 source = "vcs"
-path = "antp/__about__.py"
+path = "gomi/__about__.py"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "antp/__about__.py"
+version-file = "gomi/__about__.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
   "mypy>=1.0.0",
 ]
 [tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/antp tests}"
+check = "mypy --install-types --non-interactive {args:src/gomi tests}"
 
 [tool.coverage.run]
-source_pkgs = ["antp", "tests"]
+source_pkgs = ["gomi", "tests"]
 branch = true
 parallel = true
 omit = [
-  "src/antp/__about__.py",
+  "src/gomi/__about__.py",
 ]
 
 [tool.coverage.paths]
-antp = ["src/antp", "*/antp/src/antp"]
-tests = ["tests", "*/antp/tests"]
+gomi = ["src/gomi", "*/gomi/src/gomi"]
+tests = ["tests", "*/gomi/tests"]
 
 [tool.coverage.report]
 exclude_lines = [

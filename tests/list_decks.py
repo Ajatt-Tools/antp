@@ -1,4 +1,4 @@
-from antp.ankiconnect import invoke
+from gomi.ankiconnect import invoke
 
 
 def list_decks():
