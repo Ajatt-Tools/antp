@@ -33,25 +33,23 @@ def program_name() -> str:
 def print_help():
     options = (
         ("import", "Add one of the stored note types to Anki."),
-        ("update", "Overwrite a previously imported note type with new data. "
-                   "Fields will not be updated."),
-        ("overwrite", "Overwrite a note type in Anki with new data from a stored note type. "
-                      "Fields will not be updated."),
+        ("update", "Overwrite a previously imported note type with new data. " "Fields will not be updated."),
+        (
+            "overwrite",
+            "Overwrite a note type in Anki with new data from a stored note type. " "Fields will not be updated.",
+        ),
         ("export", "Save your note type to disk as a template."),
         ("list", "List models stored in the templates folder."),
         ("-v, --verbose", "Show detailed info when errors occur."),
     )
-    print(
-        f"Usage: {program_name()} [OPTIONS]\n\n"
-        "Options:"
-    )
+    print(f"Usage: {program_name()} [OPTIONS]\n\n" "Options:")
     col_width = [max(len(word) for word in col) + 2 for col in zip(*options)]
     for row in options:
-        print(" " * 4, "".join(col.ljust(col_width[i]) for i, col in enumerate(row)), sep='')
+        print(" " * 4, "".join(col.ljust(col_width[i]) for i, col in enumerate(row)), sep="")
 
 
 def list_stored_note_types():
-    print('\n'.join(os.listdir(NOTE_TYPES_DIR)))
+    print("\n".join(os.listdir(NOTE_TYPES_DIR)))
 
 
 def is_correct_cwd():
@@ -75,17 +73,17 @@ def main() -> int:
 
     for arg in sys.argv[1:]:
         match arg:
-            case 'export':
+            case "export":
                 action = export_note_type
-            case 'import':
+            case "import":
                 action = import_note_type
-            case 'update':
+            case "update":
                 action = update_note_type
-            case 'overwrite':
+            case "overwrite":
                 action = overwrite_note_type
-            case 'list':
+            case "list":
                 action = list_stored_note_types
-            case '-v' | '--verbose':
+            case "-v" | "--verbose":
                 wrap = False
 
     if action and wrap:
@@ -99,5 +97,5 @@ def main() -> int:
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

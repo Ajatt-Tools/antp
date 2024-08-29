@@ -16,18 +16,13 @@ def format_templates(model: NoteType) -> dict[str, Any]:
             "name": model.name,
             "templates": {
                 template.name: {"Front": template.front, "Back": template.back} for template in model.templates
-            }
+            },
         }
     }
 
 
 def format_styling(model: NoteType) -> dict[str, Any]:
-    return {
-        "model": {
-            "name": model.name,
-            "css": model.css
-        }
-    }
+    return {"model": {"name": model.name, "css": model.css}}
 
 
 def send_note_type(model: NoteType):
@@ -37,14 +32,8 @@ def send_note_type(model: NoteType):
 
 def update_note_type():
     anki_models = request_model_names()
-    models_on_disk = {
-        (model := read_model(dir_name)).name: model
-        for dir_name in os.listdir(NOTE_TYPES_DIR)
-    }
-    updatable_models = [
-        model_name for model_name in models_on_disk
-        if model_name in anki_models
-    ]
+    models_on_disk = {(model := read_model(dir_name)).name: model for dir_name in os.listdir(NOTE_TYPES_DIR)}
+    updatable_models = [model_name for model_name in models_on_disk if model_name in anki_models]
     if not updatable_models:
         print("No note types can be updated.")
         return

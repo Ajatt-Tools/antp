@@ -12,7 +12,7 @@ from .consts import NOTE_TYPES_DIR, CSS_FILENAME, FRONT_FILENAME, BACK_FILENAME,
 
 
 def read_css(model_dir_name: str) -> str:
-    with open(NOTE_TYPES_DIR / model_dir_name / CSS_FILENAME, encoding='utf8') as f:
+    with open(NOTE_TYPES_DIR / model_dir_name / CSS_FILENAME, encoding="utf8") as f:
         return f.read()
 
 
@@ -21,25 +21,25 @@ def read_card_templates(model_dir_name: str, template_names: list[str]) -> list[
     for template_name in template_names:
         dir_path = NOTE_TYPES_DIR / model_dir_name / template_name
         with (
-            open(dir_path / FRONT_FILENAME, encoding='utf8') as front,
-            open(dir_path / BACK_FILENAME, encoding='utf8') as back
+            open(dir_path / FRONT_FILENAME, encoding="utf8") as front,
+            open(dir_path / BACK_FILENAME, encoding="utf8") as back,
         ):
             templates.append(CardTemplate(template_name, front.read(), back.read()))
     return templates
 
 
 def read_model_dict(model_dir_name: str) -> dict[str, Any]:
-    with open(os.path.join(NOTE_TYPES_DIR, model_dir_name, JSON_FILENAME), encoding='utf8') as f:
+    with open(os.path.join(NOTE_TYPES_DIR, model_dir_name, JSON_FILENAME), encoding="utf8") as f:
         return json.load(f)
 
 
 def read_model(model_dir_name: str) -> NoteType:
     model_dict = read_model_dict(model_dir_name)
     return NoteType(
-        name=model_dict['modelName'],
-        fields=model_dict['inOrderFields'],
+        name=model_dict["modelName"],
+        fields=model_dict["inOrderFields"],
         css=read_css(model_dir_name),
-        templates=read_card_templates(model_dir_name, model_dict['cardTemplates']),
+        templates=read_card_templates(model_dir_name, model_dict["cardTemplates"]),
     )
 
 
@@ -55,7 +55,7 @@ def format_import(model: NoteType) -> dict[str, Any]:
                 "Back": template.back,
             }
             for template in model.templates
-        ]
+        ],
     }
 
 
@@ -67,7 +67,7 @@ def send_note_type(model: NoteType):
 
 
 def available_fonts(required_fonts: Collection[str]) -> Iterable[str]:
-    """ Filter required fonts and leave only those available on disk. """
+    """Filter required fonts and leave only those available on disk."""
     for file in os.listdir(FONTS_DIR):
         if file in required_fonts:
             yield file

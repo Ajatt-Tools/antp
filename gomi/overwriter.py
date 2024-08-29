@@ -12,10 +12,7 @@ from .updater import send_note_type
 
 def overwrite_note_type():
     anki_models = request_model_names()
-    models_on_disk = {
-        (model := read_model(dir_name)).name: model
-        for dir_name in os.listdir(NOTE_TYPES_DIR)
-    }
+    models_on_disk = {(model := read_model(dir_name)).name: model for dir_name in os.listdir(NOTE_TYPES_DIR)}
     model_name_on_disk = select(list(models_on_disk), "Take stored model: ")
     model_name_in_anki = select(anki_models, "Replace templates in model: ")
 

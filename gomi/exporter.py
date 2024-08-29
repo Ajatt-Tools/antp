@@ -13,8 +13,16 @@ from typing import Any
 
 from .ankiconnect import invoke, request_model_names
 from .common import CardTemplate, NoteType, get_used_fonts, select
-from .consts import NOTE_TYPES_DIR, FRONT_FILENAME, BACK_FILENAME, JSON_FILENAME, CSS_FILENAME, README_FILENAME, \
-    JSON_INDENT, FONTS_DIR
+from .consts import (
+    NOTE_TYPES_DIR,
+    FRONT_FILENAME,
+    BACK_FILENAME,
+    JSON_FILENAME,
+    CSS_FILENAME,
+    README_FILENAME,
+    JSON_INDENT,
+    FONTS_DIR,
+)
 
 
 def fetch_card_templates(model_name: str) -> list[CardTemplate]:
@@ -39,7 +47,7 @@ def select_model_dir_path(model_name: str) -> pathlib.Path:
 
     if model_name in dir_content:
         ans = input("Template with this name already exists. Overwrite [y/N]? ")
-        if ans.lower() != 'y':
+        if ans.lower() != "y":
             while dir_path.name in dir_content:
                 dir_path = NOTE_TYPES_DIR / f"{model_name}_{random.randint(0, 9999)}"
 
@@ -52,7 +60,7 @@ def write_card_templates(model_dir_path: pathlib.Path, templates: list[CardTempl
         if not os.path.isdir(dir_path):
             os.mkdir(dir_path)
         for filename, content in zip((FRONT_FILENAME, BACK_FILENAME), (template.front, template.back)):
-            with open(os.path.join(dir_path, filename), 'w', encoding='utf8') as f:
+            with open(os.path.join(dir_path, filename), "w", encoding="utf8") as f:
                 f.write(content)
 
 
@@ -60,7 +68,7 @@ def format_export(model: NoteType) -> dict[str, Any]:
     return {
         "modelName": model.name,
         "inOrderFields": model.fields,
-        "cardTemplates": [template.name for template in model.templates]
+        "cardTemplates": [template.name for template in model.templates],
     }
 
 
@@ -80,17 +88,17 @@ def save_note_type(model: NoteType):
     if not os.path.isdir(dir_path):
         os.mkdir(dir_path)
 
-    with open(json_path, 'w', encoding='utf8') as f:
+    with open(json_path, "w", encoding="utf8") as f:
         json.dump(format_export(model), f, indent=JSON_INDENT, ensure_ascii=False)
 
-    with open(css_path, 'w', encoding='utf8') as f:
+    with open(css_path, "w", encoding="utf8") as f:
         f.write(model.css)
 
     write_card_templates(dir_path, model.templates)
     remove_deleted_templates(dir_path, [template.name for template in model.templates])
 
     if not readme_path.is_file():
-        with open(readme_path, 'w', encoding='utf8') as f:
+        with open(readme_path, "w", encoding="utf8") as f:
             f.write(f"# {model.name}\n\n*Description and screenshots here.*")
 
 
@@ -98,7 +106,7 @@ def save_fonts(model: NoteType) -> None:
     linked_fonts = get_used_fonts(model.css)
     for font in linked_fonts:
         if file_b64 := invoke("retrieveMediaFile", filename=font):
-            with open(os.path.join(FONTS_DIR, font), 'bw') as f:
+            with open(os.path.join(FONTS_DIR, font), "bw") as f:
                 f.write(base64.b64decode(file_b64))
 
 
