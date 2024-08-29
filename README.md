@@ -7,16 +7,19 @@
 Gomi is a Python package used to store and manage Note Types for Anki in a git repository. 
 At Ajatt-Tools, we store our note types [here](https://github.com/Ajatt-Tools/AnkiNoteTypes).
 Gomi provides a super user-friendly mechanism of importing and exporting note types,
-and everyone is welcome to add their templates by making a pull request.
+and everyone is welcome to add their templates to our collection by making a pull request.
 
-## Installation
+## Prerequisites
 
 ### GNU/Linux
 
-1. Install [Python](https://wiki.archlinux.org/title/Python) 3.12 or later if you haven't already.
-2. Install [gomi](https://pypi.org/project/gomi/) using pipx: `pipx install gomi`.
+Install [Python](https://wiki.archlinux.org/title/Python) 3.12 or later if you haven't already.
 
 ### Windows
+
+Windows is not recommended [because it is malware](https://www.gnu.org/proprietary/malware-microsoft.html).
+
+<details>
 
 Install Python from the Microsoft Store or check if you already have the good version putting on your file explorer search bar
 ````
@@ -40,6 +43,12 @@ python3 -m
 ```
 
 If everything's good, you should get a response like : `Argument expected for the -m option`
+
+</details>
+
+## Installation
+
+Install [gomi](https://pypi.org/project/gomi/) using [pipx](https://pipx.pypa.io/): `pipx install gomi`.
 
 ## Usage
 
