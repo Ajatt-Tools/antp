@@ -2,7 +2,6 @@
 # License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 import dataclasses
-import os
 import re
 from dataclasses import dataclass
 from .consts import FONTS_DIR, NOTE_TYPES_DIR
