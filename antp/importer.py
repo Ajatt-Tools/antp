@@ -6,7 +6,7 @@ import json
 from typing import Any, Collection, Iterable
 
 from .ankiconnect import invoke, request_model_names
-from .common import select, get_used_fonts, NoteType, CardTemplate
+from .common import CardTemplate, NoteType, get_used_fonts, select
 from .consts import *
 
 

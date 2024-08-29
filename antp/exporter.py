@@ -10,7 +10,7 @@ from os import DirEntry
 from typing import Any
 
 from .ankiconnect import invoke, request_model_names
-from .common import NoteType, CardTemplate, get_used_fonts, select
+from .common import CardTemplate, NoteType, get_used_fonts, select
 from .consts import *
 
 

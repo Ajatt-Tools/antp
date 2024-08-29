@@ -60,7 +60,7 @@ def get_used_fonts(template_css: str):
 
 
 def init():
-    from .consts import NOTE_TYPES_DIR, FONTS_DIR
+    from .consts import FONTS_DIR, NOTE_TYPES_DIR
 
     for path in (NOTE_TYPES_DIR, FONTS_DIR):
         if not os.path.isdir(path):

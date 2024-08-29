@@ -5,7 +5,7 @@
 from typing import Any
 
 from .ankiconnect import invoke, request_model_names
-from .common import select, get_used_fonts, NoteType
+from .common import NoteType, get_used_fonts, select
 from .consts import *
 from .importer import read_model, store_fonts
 

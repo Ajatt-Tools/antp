@@ -3,7 +3,7 @@
 # License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from .ankiconnect import request_model_names
-from .common import select, get_used_fonts
+from .common import get_used_fonts, select
 from .consts import *
 from .importer import read_model, store_fonts
 from .updater import send_note_type
