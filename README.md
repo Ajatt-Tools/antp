@@ -77,8 +77,6 @@ to Anki, run:
 gomi import
 ```
 
-https://user-images.githubusercontent.com/69171671/143988488-ff70960c-840c-48e2-90d3-a24468da8942.mp4
-
 ### Updating
 
 If you imported a note type from the AJATT collection before,
