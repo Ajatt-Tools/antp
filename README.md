@@ -98,7 +98,7 @@ gomi export
 Then write a helpful readme and commit your changes:
 
 ```
-git add templates fonts && git commit
+git add templates media && git commit
 ```
 
 After committing your template, please [create a pull request](https://github.com/Ajatt-Tools/AnkiNoteTypes/pulls).
